@@ -1,0 +1,49 @@
+[
+  {
+    "sql": {
+      "run": {
+        "name": "system-track-machines-db",
+        "image_name": "percona:5.6",
+        "options": {
+          "Env": [
+            "MYSQL_ROOT_PASSWORD=password"
+          ],
+          "HostConfig": {
+            "PortBindings": {
+              "3306/tcp": [
+
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "rails_app": {
+      "registry": "docker.openlogic.com",
+      "build": {
+        "name": "system-track-machines"
+      },
+      "run": {
+        "name": "system-track-machines",
+        "options": {
+          "Env": [
+            "CORP_USE=true",
+            "SQL_HOST=system-track-machines-db"
+          ],
+          "HostConfig": {
+            "Links": [
+              "system-track-machines-db:system-track-machines-db",
+              "system-track-accounts:system-track-accounts"
+            ],
+            "PortBindings": {
+              "3000/tcp": [
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+]
